@@ -1,0 +1,164 @@
+<?php 
+include("connection.php");
+
+if($con)
+echo("Connected");
+else
+echo("not ");
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body style="background-color:white;"> <!--style="background-image: url(Background.jpg);background-size: cover;">-->
+
+ <form onsubmit="return validate()">
+
+   <div id="signUp">
+
+    <img src="images/signup.png" height="80px;"width="100px" style="margin-left: 43%;margin-bottom: 50px;margin-top: 30px;">
+
+
+  <p class="signInfo">Name</p>
+  <input type="text" id="inputName" name="name" value="" placeholder="Please Enter Your Name" style="width:96%;height: 20px;padding: 10px;">
+   <label id="lbName" style="color: red;visibility: hidden; ">Wrong Name</label>
+
+  <p class="signInfo">Email</p>
+  <input type="text" id="inputEmail" name="email" value="" placeholder="Please Enter Your Email ID" style="width:96%;height: 20px;padding: 10px">
+  <label id="lbEmail" style="color: red;visibility: hidden; ">Wrong Email format</label>
+
+  <p class="signInfo">Password</p>
+  <input type="password" id="inputPassword" name="password" value="" placeholder="Please Enter Your Password" style="width:96%;height: 20px;padding: 10px">
+  <label id="lbPassword" style="color: red;visibility: hidden; ">Password must be at least 8 Characters long</label>
+
+
+  <p class="signInfo">Retype Password</p>
+  <input type="password" id="retype-inputPassword" name="repassword" value="" placeholder="Please Re-Enter Your Password" style="width:96%;height: 20px;padding: 10px">
+  <label id="lbRePassword" style="color: red;visibility: hidden; ">Password does not match</label>
+
+
+  <p class="signInfo">Contact Number</p>
+  <input type="tel" id="inputContact" name="contact" value="" placeholder="Please Enter Your contact Number" style="width:96%;height: 20px;padding: 10px">
+  <label id="lbContact" style="color: red;visibility: hidden; ">Wrong format</label>
+  <br>
+  <br>
+  <button type="submit" name="submit" class="SignUp" >Sign Up</button>
+
+</form>
+</div>
+
+<script type="text/javascript">
+
+var username= document.getElementById("inputName");
+ var email= document.getElementById("inputEmail");
+ var password= document.getElementById("inputPassword");
+ var contact= document.getElementById("inputContact");
+ var repassword=document.getElementById("retype-inputPassword");
+
+
+
+function validate(){
+   
+
+   if(username.value.trim()=="" || email.value.trim()=="" || password.value.trim()=="" || contact.value.trim()==""){
+
+    alert("Please fill all the required information!");
+    return false;
+   }
+
+   else{
+
+    var a = check();
+    if(a){
+      <?php
+  $name=$_GET['name'];
+  echo($name);
+  $email=$_GET['email'];
+  $password=$_GET['password'];
+  $repassword=$_GET['repassword'];
+  $contact=$_GET['contact'];
+
+  $query="INSERT INTO user_info(User_Name,Email,Password,Confirm_password,Contact) VALUES ('$name','$email','$password','$repassword','$contact')";
+  $data= mysql_query($con,$query);
+?>
+   alert("Your database is created");
+       return a;
+    }
+
+    else{
+      return false;
+    }
+   }
+}
+
+function check(){
+    var name= /[a-z A-Z]{4,20}/;
+    var Email= /^([a-z A-Z 0-9\.-]+)@([a-z A-Z]+).([a-z A-Z]{2,10})$/;
+    var number= /[0][1][5-9][0-9]{8}/;
+
+    if(name.test(username.value)){
+        
+        document.getElementById("lbName").style.visibility="hidden";
+
+    }
+    else{
+        document.getElementById("lbName").style.visibility="visible";
+        return false;
+    }
+   if(Email.test(email.value)){
+          
+    document.getElementById("lbEmail").style.visibility="hidden"; 
+
+    }
+    else{
+        document.getElementById("lbEmail").style.visibility="visible";
+        return false;
+    }
+
+    if(password.value.trim().length<8){
+        document.getElementById("lbPassword").style.visibility="visible";
+        return false;
+    }
+    else{
+
+        document.getElementById("lbPassword").style.visibility="hidden";
+
+    }
+
+    if(password.value==repassword.value){
+
+        document.getElementById("lbRePassword").style.visibility="hidden";
+
+    }
+    else{
+        document.getElementById("lbRePassword").style.visibility="visible";
+        return false;
+    }
+
+    if(number.test(contact.value)){
+
+        document.getElementById("lbContact").style.visibility="hidden";
+
+        return true;
+
+    }
+    else{
+        document.getElementById("lbContact").style.visibility="visible";
+        return false;
+    }
+
+}
+
+
+</script>
+</body>
+</html>
+
